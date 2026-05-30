@@ -1,0 +1,1160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jaguar Darts Premier League</title>
+
+<style>
+:root { color-scheme: dark; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: radial-gradient(circle at top, #1a120a, #0a0705);
+  color: #e5e7eb;
+}
+
+.wrap { max-width: 1050px; margin: auto; padding: 26px; }
+
+header { text-align: center; margin-bottom: 18px; }
+
+.logo {
+  display: block;
+  margin: 0 auto 12px;
+  max-width: 160px;
+  width: 100%;
+  height: auto;
+}
+
+h1 { margin: 0 0 6px; font-size: 28px; }
+.sub { opacity: .8; font-size: 14px; }
+
+.section {
+  background: linear-gradient(180deg, #1a0f05, #120a03);
+  border: 1px solid #3a2210;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 22px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.4);
+  min-width: 0;
+}
+
+.section h2 { margin: 0 0 14px; font-size: 18px; display: flex; align-items: center; gap: 10px; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 900px) { .grid2 { grid-template-columns: 1fr; } }
+
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+
+th, td { padding: 10px 8px; text-align: center; }
+
+th {
+  background: #1a0f05;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: .05em;
+}
+
+td { border-bottom: 1px solid #3a2210; }
+
+tbody tr:hover { background: rgba(200,150,80,.07); }
+
+tr.zone-finals    { background: rgba(234,179,8,.07); }
+
+.zone-badge {
+  display: inline-block;
+  margin-left: 7px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 999px;
+  vertical-align: middle;
+  opacity: .85;
+}
+.zone-badge--zone-finals {
+  background: rgba(234,179,8,.2);
+  border: 1px solid rgba(234,179,8,.45);
+  color: #fde047;
+}
+
+td:first-child, th:first-child { text-align: left; padding-left: 12px; }
+
+@media (max-width: 600px) {
+  table { table-layout: fixed; }
+  th, td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+
+#recentResults, #fixtures { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+#recentResults table, #fixtures table { min-width: 680px; }
+
+@media (max-width: 600px) {
+  #league { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  #league table { min-width: 800px; table-layout: auto; }
+  #league th, #league td { white-space: nowrap; overflow: visible; text-overflow: clip; }
+  #league th:first-child, #league td:first-child { min-width: 160px; white-space: nowrap; }
+}
+
+.score {
+  white-space: nowrap;
+  display: inline-block;
+  min-width: 52px;
+  font-weight: 700;
+  letter-spacing: .02em;
+}
+
+.vs-cell {
+  opacity: .45;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  width: 30px;
+  padding: 10px 0;
+}
+
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; font-size: 12px; white-space: nowrap; }
+.pill.played { background: rgba(34,197,94,.15); border: 1px solid rgba(34,197,94,.35); }
+.pill.tbp    { background: rgba(239,68,68,.15);  border: 1px solid rgba(239,68,68,.35); }
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+select, button {
+  background: #120a03;
+  color: #e5e7eb;
+  border: 1px solid #3a2210;
+  border-radius: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+button:hover { background: #1e1005; }
+.muted { opacity: .75; font-size: 12px; }
+
+.clickable {
+  cursor: pointer;
+  color: #f6c97a;
+  text-decoration: underline;
+  text-decoration-color: rgba(246,201,122,.35);
+  text-underline-offset: 3px;
+}
+.clickable:hover { color: #ffffff; text-decoration-color: rgba(255,255,255,.55); }
+
+.lists { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 900px) { .lists { grid-template-columns: 1fr; } }
+
+.panel {
+  border: 1px solid #3a2210;
+  border-radius: 14px;
+  background: rgba(26,15,5,.35);
+  padding: 12px;
+}
+.panel h3 { margin: 0 0 10px; font-size: 14px; opacity: .9; display: flex; align-items: center; gap: 8px; }
+.ranklist { margin: 0; padding: 0; list-style: none; }
+.ranklist li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 6px;
+  border-bottom: 1px solid rgba(58,34,16,.6);
+}
+.ranklist li:last-child { border-bottom: none; }
+
+.badge {
+  font-size: 12px;
+  opacity: .85;
+  border: 1px solid rgba(58,34,16,.9);
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(18,10,3,.6);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 9999;
+}
+.modal {
+  width: 100%;
+  max-width: 760px;
+  background: linear-gradient(180deg, #1a0f05, #120a03);
+  border: 1px solid #3a2210;
+  border-radius: 18px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.6);
+  overflow: hidden;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(58,34,16,.7);
+}
+.modal-title { display: flex; flex-direction: column; gap: 2px; }
+.modal-title strong { font-size: 16px; }
+.modal-title span { font-size: 12px; opacity: .75; }
+.modal-close { border-radius: 12px; padding: 8px 10px; }
+.modal-body { padding: 14px 16px; }
+
+.profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 800px) { .profile-grid { grid-template-columns: 1fr; } }
+
+.kpi { border: 1px solid rgba(58,34,16,.7); border-radius: 14px; padding: 12px; background: rgba(26,15,5,.28); }
+.kpi h4 { margin: 0 0 8px; font-size: 13px; opacity: .85; }
+.kpi .rows { display: grid; gap: 8px; }
+.kpi .row { display: flex; justify-content: space-between; gap: 10px; }
+.kpi .row span:first-child { opacity: .8; }
+.kpi .row span:last-child { font-weight: 650; }
+
+.error { padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(239,68,68,.35); background: rgba(239,68,68,.12); }
+
+.site-footer {
+  max-width: 1050px;
+  margin: 0 auto 26px;
+  padding: 14px 10px;
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.65;
+  border-top: 1px solid #3a2210;
+}
+
+.footer-ad { display: block; width: 100%; max-width: 1050px; margin: 10px auto 8px; padding: 0; }
+.footer-ad img { width: 100%; height: auto; max-height: 110px; object-fit: contain; display: block; }
+@media (max-width: 600px) { .footer-ad img { max-height: 75px; } }
+
+.small { font-size: 12px; opacity: .8; }
+
+.player-search-wrap { position: relative; display: inline-flex; align-items: center; }
+
+#fixturePlayerSearch {
+  background: #120a03;
+  color: #e5e7eb;
+  border: 1px solid #3a2210;
+  border-radius: 12px;
+  padding: 8px 32px 8px 12px;
+  cursor: text;
+  font-size: 14px;
+  width: 180px;
+  outline: none;
+  transition: border-color .2s, width .2s;
+}
+#fixturePlayerSearch:focus { border-color: #b87a30; width: 220px; }
+#fixturePlayerSearch::placeholder { opacity: .5; }
+
+.search-clear-btn {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #e5e7eb;
+  opacity: .5;
+  padding: 0;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: none;
+  line-height: 1;
+}
+.search-clear-btn:hover { opacity: 1; background: none; }
+#fixturePlayerSearch:not(:placeholder-shown) ~ .search-clear-btn { display: block; }
+
+.player-highlight { color: #f6c97a; font-weight: 600; }
+
+.finals-notice {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: rgba(234,179,8,.15);
+  border: 1px solid rgba(234,179,8,.35);
+  color: #fde047;
+  margin-bottom: 14px;
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<header>
+  <!-- Replace src with your own logo URL -->
+  <img class="logo" src="https://i.postimg.cc/wTwzxQT3/DDL.png" alt="Jaguar Darts">
+  <h1>Jaguar Darts Premier League</h1>
+  <div class="sub">Live standings, averages &amp; fixtures</div>
+</header>
+
+<div class="grid2">
+  <section class="section">
+    <h2>🏆 League Table</h2>
+    <div class="finals-notice">⭐ Top 4 qualify for Finals Night</div>
+    <div id="league">Loading…</div>
+  </section>
+
+  <section class="section">
+    <h2>🎯 Player Averages</h2>
+    <div id="averages">Loading…</div>
+  </section>
+</div>
+
+<section class="section">
+  <h2>🔥 Player Records</h2>
+  <div class="lists" id="records">Loading…</div>
+</section>
+
+<section class="section">
+  <h2>📣 League Highlights</h2>
+  <div class="lists" id="highlights">Loading…</div>
+  <div class="muted" id="highlightsRange" style="margin-top:10px;"></div>
+</section>
+
+<section class="section">
+  <h2>📈 Form Guide (Last 5)</h2>
+  <div id="formGuide">Loading…</div>
+</section>
+
+<section class="section">
+  <h2>🧾 Recent Results</h2>
+  <div class="toolbar">
+    <div class="muted" id="recentResultsMeta">Loading…</div>
+    <select id="recentLimit">
+      <option value="5" selected>Last 5</option>
+      <option value="10">Last 10</option>
+      <option value="20">Last 20</option>
+    </select>
+  </div>
+  <div id="recentResults">Loading…</div>
+</section>
+
+<section class="section">
+  <h2>🗓️ Fixtures</h2>
+  <div class="toolbar">
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+      <select id="weekSelect"></select>
+      <span class="muted" id="weekSummary"></span>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+      <div class="player-search-wrap">
+        <input
+          type="text"
+          id="fixturePlayerSearch"
+          placeholder="Search player…"
+          autocomplete="off"
+          aria-label="Filter fixtures by player name"
+        >
+        <button class="search-clear-btn" id="fixtureSearchClear" title="Clear search" tabindex="-1">✕</button>
+      </div>
+      <button id="refreshBtn">Refresh</button>
+    </div>
+  </div>
+  <div id="fixtures">Loading…</div>
+</section>
+
+</div>
+
+<footer class="site-footer">
+  <a class="footer-ad"
+     href="https://discord.gg/eMP7mP9VCp"
+     target="_blank"
+     rel="noopener">
+    <img
+      src="https://i.postimg.cc/yNV2VdJz/Screen-Shot-2026-02-10-at-00-58-47.jpg"
+      alt="Join the Discord Darts Leagues"
+      loading="lazy">
+  </a>
+  Jaguar Darts Premier League &mdash; powered by Discord Darts Leagues
+</footer>
+
+<!-- Player Modal -->
+<div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalName">
+    <div class="modal-header">
+      <div class="modal-title">
+        <strong id="modalName">Player</strong>
+        <span id="modalSub">Player Profile</span>
+      </div>
+      <button class="modal-close" id="modalClose" type="button">Close</button>
+    </div>
+    <div class="modal-body" id="modalBody">Loading…</div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG — fill in your Google Sheet details below
+   ============================================================
+   PUBLISHED_ID : the long ID from your sheet's published CSV URL
+     e.g. https://docs.google.com/spreadsheets/d/e/PUBLISHED_ID/pub?...
+   GIDs         : the gid= number in the URL for each tab
+   ============================================================ */
+
+const PUBLISHED_ID = "YOUR_PUBLISHED_SHEET_ID";
+
+const GID = {
+  LEAGUE:       "YOUR_GID_HERE",   // League Table tab
+  AVERAGES:     "YOUR_GID_HERE",   // Averages tab
+  FIXTURES:     "YOUR_GID_HERE",   // Fixtures tab
+  RESULTS:      "YOUR_GID_HERE",   // Results tab
+  PLAYER_STATS: "YOUR_GID_HERE",   // Player Stats tab
+  STAT_ENTRY:   "YOUR_GID_HERE",   // Stat Entry tab
+};
+
+/* Top N rows that qualify for Finals Night */
+const FINALS_PLACES = 4;
+
+/* ============================================================
+   CORE HELPERS
+   ============================================================ */
+
+function csvUrl(gid) {
+  return `https://docs.google.com/spreadsheets/d/e/${PUBLISHED_ID}/pub?gid=${gid}&single=true&output=csv&t=${Date.now()}`;
+}
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [], cur = "", inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i], nx = text[i+1];
+    if (c === '"' && inQ && nx === '"') { cur += '"'; i++; continue; }
+    if (c === '"') { inQ = !inQ; continue; }
+    if (c === ',' && !inQ) { row.push(cur); cur = ""; continue; }
+    if ((c === '\n' || c === '\r') && !inQ) {
+      if (cur.length || row.length) { row.push(cur); rows.push(row); }
+      row = []; cur = "";
+      if (c === '\r' && nx === '\n') i++;
+      continue;
+    }
+    cur += c;
+  }
+  if (cur.length || row.length) { row.push(cur); rows.push(row); }
+  return rows.filter(r => r.some(cell => String(cell).trim() !== ""));
+}
+
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[m]);
+}
+
+function num(x) {
+  const n = Number(String(x ?? "").trim().replace("%",""));
+  return Number.isFinite(n) ? n : 0;
+}
+
+function pct(made, att) {
+  const m = num(made), a = num(att);
+  return a > 0 ? (m / a) * 100 : null;
+}
+
+function fmtPct(v) {
+  if (v === null || !Number.isFinite(v)) return "—";
+  return `${v.toFixed(2)}%`;
+}
+
+function normKey(s) { return String(s ?? "").toLowerCase().replace(/[^a-z0-9]+/g, ""); }
+
+function getAny(o, candidates) {
+  const keys = Object.keys(o);
+  for (const c of candidates) {
+    const hit = keys.find(k => normKey(k) === normKey(c));
+    if (hit !== undefined) return o[hit];
+  }
+  return "";
+}
+
+function normName(s) {
+  return String(s ?? "").trim().toLowerCase().replace(/\s+/g, " ").replace(/[']/g, "'");
+}
+
+function samePlayer(a, b) { return normName(a) === normName(b); }
+
+function parseDateAny(s) {
+  const t = String(s || "").trim();
+  if (!t) return null;
+  const d1 = new Date(t);
+  if (!isNaN(d1)) return d1;
+  const parts = t.split(/[\/\-\.]/).map(x => x.trim());
+  if (parts.length === 3) {
+    const [a,b,c] = parts.map(Number);
+    if ([a,b,c].every(Number.isFinite) && c > 1900) {
+      const d2 = new Date(c, b-1, a);
+      if (!isNaN(d2)) return d2;
+    }
+  }
+  return null;
+}
+
+function startOfDay(d) { const x = new Date(d); x.setHours(0,0,0,0); return x; }
+
+function rowsToObjects(rows) {
+  const headers = rows[0].map(h => String(h || "").trim());
+  return rows.slice(1).map(r => {
+    const o = {};
+    headers.forEach((h, i) => o[h] = r[i] ?? "");
+    return o;
+  });
+}
+
+/* ============================================================
+   ZONE / TABLE
+   ============================================================ */
+
+function getRowZone(rowIdx) {
+  if (rowIdx < FINALS_PLACES) return { cls: "zone-finals", label: "F", title: "Finals Night qualifier" };
+  return null;
+}
+
+function renderTable(rows, elId, clickableHeaderNamesLower = []) {
+  if (!rows || rows.length < 2) {
+    document.getElementById(elId).innerHTML = `<div class="muted">No data.</div>`;
+    return;
+  }
+  const headers = rows[0].map(h => String(h || "").trim());
+  const clickableCols = new Set();
+  headers.forEach((h, i) => { if (clickableHeaderNamesLower.includes(h.toLowerCase())) clickableCols.add(i); });
+  const totalRows = rows.length - 1;
+  let html = `<table><thead><tr>`;
+  headers.forEach(h => html += `<th>${esc(h)}</th>`);
+  html += `</tr></thead><tbody>`;
+  rows.slice(1).forEach((r, rowIdx) => {
+    const zone = getRowZone(rowIdx, totalRows);
+    html += `<tr class="${zone ? zone.cls : ''}">`;
+    headers.forEach((_, i) => {
+      const v = String(r[i] ?? "");
+      let cell;
+      if (clickableCols.has(i)) {
+        const pos = `<span style="opacity:.5;margin-right:6px;font-size:11px;">${rowIdx + 1}</span>`;
+        const safe = esc(v);
+        const zoneBadge = zone ? `<span class="zone-badge zone-badge--${zone.cls}" title="${zone.title}">${zone.label}</span>` : '';
+        cell = `${pos}<span class="clickable" data-player="${safe}">${safe}</span>${zoneBadge}`;
+      } else {
+        cell = esc(v);
+      }
+      html += `<td>${cell}</td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody></table>`;
+  document.getElementById(elId).innerHTML = html;
+}
+
+/* ============================================================
+   PILL / STATUS
+   ============================================================ */
+
+function normaliseStatus(s) { return String(s ?? "").trim().toLowerCase().replace(/\s+/g, " "); }
+function isGamePlayed(s) { return normaliseStatus(s) === "game played"; }
+function pill(status) {
+  return isGamePlayed(status)
+    ? `<span class="pill played">✅ Game Played</span>`
+    : `<span class="pill tbp">⏳ To Be Played</span>`;
+}
+
+/* ============================================================
+   FIXTURES
+   ============================================================ */
+
+let _fixtureSearchTerm = "";
+let _allFixtureData = [];
+
+function drawFixturesByWeek(data, releasedWeeks) {
+  const select = document.getElementById("weekSelect");
+  const week = select.value || releasedWeeks[0];
+  const weekRows = data.filter(d => d.match === week);
+  const played = weekRows.filter(d => isGamePlayed(d.status)).length;
+  document.getElementById("weekSummary").textContent = `Played: ${played}/${weekRows.length}`;
+
+  let html = `<table><thead><tr><th>Match</th><th>Home</th><th></th><th>Away</th><th>Status</th></tr></thead><tbody>`;
+  weekRows.forEach(r => {
+    html += `<tr>
+      <td>${esc(r.match)}</td>
+      <td>${esc(r.home)}</td>
+      <td class="vs-cell">vs</td>
+      <td>${esc(r.away)}</td>
+      <td>${pill(r.status)}</td>
+    </tr>`;
+  });
+  html += `</tbody></table>`;
+  document.getElementById("fixtures").innerHTML = html;
+}
+
+function drawFixturesByPlayer(term) {
+  const matched = _allFixtureData.filter(r =>
+    r.home.toLowerCase().includes(term) || r.away.toLowerCase().includes(term)
+  );
+  document.getElementById("weekSummary").textContent = matched.length ? `${matched.length} fixture(s) found` : `No fixtures found`;
+  if (!matched.length) {
+    document.getElementById("fixtures").innerHTML = `<div class="muted">No fixtures found for "${esc(term)}".</div>`;
+    return;
+  }
+  let html = `<table><thead><tr><th>Match</th><th>Home</th><th></th><th>Away</th><th>Status</th></tr></thead><tbody>`;
+  matched.forEach(r => {
+    html += `<tr>
+      <td>${esc(r.match)}</td>
+      <td class="${r.home.toLowerCase().includes(term) ? 'player-highlight' : ''}">${esc(r.home)}</td>
+      <td class="vs-cell">vs</td>
+      <td class="${r.away.toLowerCase().includes(term) ? 'player-highlight' : ''}">${esc(r.away)}</td>
+      <td>${pill(r.status)}</td>
+    </tr>`;
+  });
+  html += `</tbody></table>`;
+  document.getElementById("fixtures").innerHTML = html;
+}
+
+function refreshFixtureView() {
+  const term = _fixtureSearchTerm.trim().toLowerCase();
+  const select = document.getElementById("weekSelect");
+  if (term) {
+    select.style.display = "none";
+    drawFixturesByPlayer(term);
+  } else {
+    select.style.display = "";
+    const releasedWeeks = [...new Set(_allFixtureData.map(d => d.match))];
+    if (releasedWeeks.length) drawFixturesByWeek(_allFixtureData, releasedWeeks);
+  }
+}
+
+const fixtureSearchInput = document.getElementById("fixturePlayerSearch");
+const fixtureSearchClear = document.getElementById("fixtureSearchClear");
+
+fixtureSearchInput.addEventListener("input", () => {
+  _fixtureSearchTerm = fixtureSearchInput.value;
+  refreshFixtureView();
+});
+
+fixtureSearchClear.addEventListener("click", () => {
+  fixtureSearchInput.value = "";
+  _fixtureSearchTerm = "";
+  refreshFixtureView();
+  fixtureSearchInput.focus();
+});
+
+function renderFixtures(rows) {
+  const headers = rows[0].map(h => String(h || "").trim());
+  const colExact = name => headers.findIndex(h => h.toLowerCase() === name);
+  const colContains = txt => headers.findIndex(h => h.toLowerCase().includes(txt));
+
+  const iMatch   = colExact("match");
+  const iHome    = colExact("home");
+  const iAway    = colExact("away");
+  const iStatus  = colExact("status");
+  const iRelease = colContains("release");
+
+  const data = rows.slice(1)
+    .filter(r => String(r[iMatch] ?? "").trim() !== "")
+    .map(r => ({
+      match:    String(r[iMatch]   ?? "").trim(),
+      home:     String(r[iHome]    ?? "").trim(),
+      away:     String(r[iAway]    ?? "").trim(),
+      status:   String(r[iStatus]  ?? "").trim(),
+      released: String(r[iRelease] ?? "").trim().toLowerCase()
+    }));
+
+  const releasedWeeks = [...new Set(
+    data.filter(d => ["yes","true","y","1"].includes(d.released)).map(d => d.match)
+  )].sort((a,b) => Number(a) - Number(b));
+
+  const select = document.getElementById("weekSelect");
+  if (!releasedWeeks.length) {
+    select.innerHTML = `<option value="">No fixtures released</option>`;
+    document.getElementById("weekSummary").textContent = "";
+    document.getElementById("fixtures").innerHTML = `<div class="muted">No fixtures released yet.</div>`;
+    _allFixtureData = [];
+    return;
+  }
+
+  const releasedWeekSet = new Set(releasedWeeks);
+  _allFixtureData = data.filter(d => releasedWeekSet.has(d.match));
+  select.innerHTML = releasedWeeks.map(w => `<option value="${esc(w)}">Match ${esc(w)}</option>`).join("");
+  select.onchange = () => { if (!_fixtureSearchTerm.trim()) drawFixturesByWeek(_allFixtureData, releasedWeeks); };
+  drawFixturesByWeek(_allFixtureData, releasedWeeks);
+}
+
+/* ============================================================
+   RECORDS
+   ============================================================ */
+
+function renderRecords(objs) {
+  const get = (o, k) => o[k] ?? o[k.toUpperCase()] ?? o[k.toLowerCase()] ?? "";
+
+  const leaderboard = (title, emoji, valueKey, dir = "desc", limit = 5, isBestLeg = false) => {
+    const items = objs
+      .map(p => ({ player: get(p, "Player"), val: num(get(p, valueKey)) }))
+      .filter(x => x.player && (isBestLeg ? x.val > 0 : true))
+      .sort((a,b) => dir === "asc" ? a.val - b.val : b.val - a.val)
+      .slice(0, limit);
+    const lis = items.map((x, i) => `<li><span>${i+1}. ${esc(x.player)}</span><span class="badge">${esc(x.val)}</span></li>`).join("");
+    return `<div class="panel"><h3>${emoji} ${esc(title)}</h3><ul class="ranklist">${lis || `<li><span class="muted">No data yet</span><span></span></li>`}</ul></div>`;
+  };
+
+  document.getElementById("records").innerHTML =
+    leaderboard("Most 180s", "💥", "180", "desc") +
+    leaderboard("Most 140+", "🔥", "140+", "desc") +
+    leaderboard("Most 100+", "🎯", "100+", "desc") +
+    leaderboard("Highest Finish", "🏆", "Highest Finish", "desc") +
+    leaderboard("Best Leg (Lowest)", "⚡", "Best Leg", "asc", 5, true);
+}
+
+/* ============================================================
+   HIGHLIGHTS
+   ============================================================ */
+
+function renderLeagueHighlights(statEntryRows) {
+  const objs = rowsToObjects(statEntryRows);
+  const now = new Date();
+  const end = startOfDay(now); end.setDate(end.getDate() + 1);
+  const start = startOfDay(now); start.setDate(start.getDate() - 13);
+
+  document.getElementById("highlightsRange").textContent =
+    `Last 14 days: ${start.toLocaleDateString()} – ${new Date(end.getTime()-1).toLocaleDateString()}`;
+
+  const all = objs.map(o => ({
+    date:   parseDateAny(getAny(o, ["Date","Match Date"])),
+    player: String(getAny(o, ["Player"]) || "").trim(),
+    s100:   num(getAny(o, ["100+","100 +"])),
+    s140:   num(getAny(o, ["140+","140 +"])),
+    s180:   num(getAny(o, ["180"])),
+    hf:     num(getAny(o, ["Highest Finish","High Finish"])),
+    bl:     num(getAny(o, ["Best Leg","Best Leg (Lowest)"])),
+    cm:     num(getAny(o, ["Checkout Made","Checkouts Made"])),
+    ca:     num(getAny(o, ["Checkout Attempts","Checkouts Attempted","Checkout Attempted"])),
+  })).filter(x => x.player && x.date && x.date >= start && x.date < end);
+
+  if (!all.length) {
+    document.getElementById("highlights").innerHTML = `<div class="panel"><h3>ℹ️ No stats logged in the last 14 days</h3><div class="muted">Make sure Stat Entry has a valid Date column.</div></div>`;
+    return;
+  }
+
+  const agg = new Map();
+  for (const r of all) {
+    if (!agg.has(r.player)) agg.set(r.player, {player:r.player,s100:0,s140:0,s180:0,hf:0,bl:null,cm:0,ca:0});
+    const a = agg.get(r.player);
+    a.s100 += r.s100; a.s140 += r.s140; a.s180 += r.s180;
+    a.hf = Math.max(a.hf, r.hf || 0);
+    if (r.bl > 0) a.bl = (a.bl === null) ? r.bl : Math.min(a.bl, r.bl);
+    a.cm += r.cm; a.ca += r.ca;
+  }
+  const arr = [...agg.values()];
+
+  const topN = (title, emoji, accessor, fmt = v => v, dir = "desc", limit = 3) => {
+    const sorted = [...arr]
+      .map(x => ({ player: x.player, val: accessor(x) }))
+      .filter(x => x.player && x.val !== null && x.val !== undefined)
+      .sort((a,b) => dir === "asc" ? a.val - b.val : b.val - a.val)
+      .slice(0, limit);
+    const lis = sorted.map((x,i) => `<li><span>${i+1}. ${esc(x.player)}</span><span class="badge">${esc(fmt(x.val))}</span></li>`).join("");
+    return `<div class="panel"><h3>${emoji} ${esc(title)}</h3><ul class="ranklist">${lis || `<li><span class="muted">No data yet</span><span></span></li>`}</ul></div>`;
+  };
+
+  const checkoutPanel = () => {
+    const MIN_ATTEMPTS = 5;
+    const eligible = arr
+      .map(x => ({ player: x.player, cp: pct(x.cm, x.ca), att: x.ca }))
+      .filter(x => x.cp !== null && x.att >= MIN_ATTEMPTS)
+      .sort((a,b) => b.cp - a.cp).slice(0, 3);
+    const lis = eligible.map((x,i) => `<li><span>${i+1}. ${esc(x.player)}</span><span class="badge">${fmtPct(x.cp)}</span></li>`).join("");
+    return `<div class="panel"><h3>✅ Best Checkout % (Last 14 days)</h3><ul class="ranklist">${lis || `<li><span class="muted">Not enough data yet</span><span></span></li>`}</ul><div class="muted" style="margin-top:8px;">Min ${MIN_ATTEMPTS} attempts</div></div>`;
+  };
+
+  document.getElementById("highlights").innerHTML =
+    topN("Most 180s (Last 14 days)", "💥", x => x.s180) +
+    topN("Most 140+ (Last 14 days)", "🔥", x => x.s140) +
+    topN("Most 100+ (Last 14 days)", "🎯", x => x.s100) +
+    topN("Best Checkout (Last 14 days)", "🏆", x => x.hf) +
+    checkoutPanel() +
+    topN("Best Leg (Lowest, Last 14 days)", "⚡", x => x.bl, v => v ?? "—", "asc");
+}
+
+/* ============================================================
+   CACHES
+   ============================================================ */
+
+let PLAYER_STATS_CACHE = null;
+let RESULTS_CACHE = null;
+let STAT_ENTRY_CACHE = null;
+
+/* ============================================================
+   FORM GUIDE
+   ============================================================ */
+
+function buildCurrentForm(playerName, maxGames = 5) {
+  if (!RESULTS_CACHE) return [];
+  const pn = normName(playerName);
+  const games = RESULTS_CACHE
+    .map(o => ({
+      date:   String(getAny(o, ["Date"]) ?? "").trim(),
+      home:   String(getAny(o, ["Home Player","Home"]) ?? "").trim(),
+      away:   String(getAny(o, ["Away Player","Away"]) ?? "").trim(),
+      winner: String(getAny(o, ["Winner"]) ?? "").trim(),
+      loser:  String(getAny(o, ["Loser"])  ?? "").trim(),
+      draw:   String(getAny(o, ["Draw?","Draw"]) ?? "").trim(),
+    }))
+    .filter(g => normName(g.home) === pn || normName(g.away) === pn);
+
+  if (!games.length) return [];
+
+  const parse = d => { const x = new Date(d); return isNaN(x) ? null : x.getTime(); };
+  const withT = games.map(g => ({...g, t: parse(g.date)}));
+  const sortable = withT.some(g => g.t !== null);
+  const ordered = sortable ? withT.sort((a,b) => (a.t ?? 0) - (b.t ?? 0)) : withT;
+  return ordered.slice(-maxGames).reverse().map(g => {
+    const isDraw = ["y","yes","true","1"].includes(String(g.draw).trim().toLowerCase());
+    if (isDraw) return "D";
+    if (samePlayer(g.winner, playerName)) return "W";
+    if (samePlayer(g.loser, playerName)) return "L";
+    return "?";
+  });
+}
+
+function renderFormGuide() {
+  const el = document.getElementById("formGuide");
+  if (!el) return;
+  if (!PLAYER_STATS_CACHE || !RESULTS_CACHE) {
+    el.innerHTML = `<div class="muted">Loading…</div>`; return;
+  }
+  const players = PLAYER_STATS_CACHE.map(p => String(p["Player"] || "").trim()).filter(Boolean);
+  const score5 = form => form.reduce((t,ch) => t + (ch==="W"?3:ch==="D"?1:0), 0);
+  const rows = players.map(name => ({ name, form: buildCurrentForm(name, 5) }));
+  rows.sort((a,b) => score5(b.form) - score5(a.form) || a.name.localeCompare(b.name));
+
+  const formBadges = letters => {
+    if (!letters || !letters.length) return `<span class="muted">—</span>`;
+    return letters.map(ch => {
+      if (ch === "W") return `<span class="badge" style="border-color:rgba(34,197,94,.55);color:#86efac;">W</span>`;
+      if (ch === "D") return `<span class="badge" style="border-color:rgba(234,179,8,.55);color:#fde047;">D</span>`;
+      if (ch === "L") return `<span class="badge" style="border-color:rgba(239,68,68,.55);color:#fca5a5;">L</span>`;
+      return `<span class="badge">?</span>`;
+    }).join(" ");
+  };
+
+  let html = `<table><thead><tr><th>Player</th><th>Form (Latest → Oldest)</th></tr></thead><tbody>`;
+  rows.forEach(r => { html += `<tr><td>${esc(r.name)}</td><td>${formBadges(r.form)}</td></tr>`; });
+  html += `</tbody></table>`;
+  el.innerHTML = html;
+}
+
+/* ============================================================
+   PLAYER MODAL
+   ============================================================ */
+
+function checkoutPctFromStatEntry(playerName) {
+  if (!STAT_ENTRY_CACHE) return null;
+  const pn = normName(playerName);
+  let made = 0, att = 0;
+  for (const o of STAT_ENTRY_CACHE) {
+    if (normName(String(getAny(o, ["Player"]) || "")) !== pn) continue;
+    made += num(getAny(o, ["Checkout Made","Checkouts Made"]));
+    att  += num(getAny(o, ["Checkout Attempts","Checkouts Attempted","Checkout Attempted"]));
+  }
+  return pct(made, att);
+}
+
+function buildFallbackFromStatEntry(playerName) {
+  if (!STAT_ENTRY_CACHE) return null;
+  const pn = normName(playerName);
+  let s60=0,s80=0,s100=0,s140=0,s180=0,highestFinish=0,bestLeg=null,foundAny=false;
+  for (const o of STAT_ENTRY_CACHE) {
+    if (normName(String(getAny(o, ["Player"]) || "")) !== pn) continue;
+    foundAny = true;
+    s60  += num(getAny(o, ["60+","60 +"]));
+    s80  += num(getAny(o, ["80+","80 +"]));
+    s100 += num(getAny(o, ["100+","100 +"]));
+    s140 += num(getAny(o, ["140+","140 +"]));
+    s180 += num(getAny(o, ["180"]));
+    highestFinish = Math.max(highestFinish, num(getAny(o, ["Highest Finish","High Finish"])));
+    const bl = num(getAny(o, ["Best Leg","Best Leg (Lowest)"]));
+    if (bl > 0) bestLeg = (bestLeg === null) ? bl : Math.min(bestLeg, bl);
+  }
+  return foundAny ? { s60,s80,s100,s140,s180, highestFinish: highestFinish || null, bestLeg } : null;
+}
+
+function computeRecordFromResults(playerName) {
+  if (!RESULTS_CACHE) return {matches:0,wins:0,draws:0,losses:0,legsWon:null,legsLost:null};
+  const pn = normName(playerName);
+  let matches=0,wins=0,draws=0,losses=0,legsWon=0,legsLost=0,legsAvailable=false;
+  for (const o of RESULTS_CACHE) {
+    const home = String(getAny(o, ["Home Player","Home"]) ?? "").trim();
+    const away = String(getAny(o, ["Away Player","Away"]) ?? "").trim();
+    if (!(normName(home) === pn || normName(away) === pn)) continue;
+    matches++;
+    const isDraw = ["y","yes","true","1"].includes(String(getAny(o, ["Draw?","Draw"]) ?? "").trim().toLowerCase());
+    const winner = String(getAny(o, ["Winner"]) ?? "").trim();
+    const loser  = String(getAny(o, ["Loser"])  ?? "").trim();
+    if (isDraw) draws++;
+    else if (samePlayer(winner, playerName)) wins++;
+    else if (samePlayer(loser, playerName)) losses++;
+    const hl = getAny(o, ["Home Legs","Home Leg","Home Score"]);
+    const al = getAny(o, ["Away Legs","Away Leg","Away Score"]);
+    const homeLegs = num(hl), awayLegs = num(al);
+    if ((String(hl).trim() || String(al).trim()) && Number.isFinite(homeLegs) && Number.isFinite(awayLegs)) {
+      legsAvailable = true;
+      if (normName(home) === pn) { legsWon += homeLegs; legsLost += awayLegs; }
+      else { legsWon += awayLegs; legsLost += homeLegs; }
+    }
+  }
+  return { matches, wins, draws, losses, legsWon: legsAvailable ? legsWon : null, legsLost: legsAvailable ? legsLost : null };
+}
+
+function renderFormPills(formLetters) {
+  if (!formLetters || !formLetters.length) return `<span class="muted">No recent results</span>`;
+  return `<div style="display:flex;gap:8px;flex-wrap:wrap;">${formLetters.map(ch => {
+    if (ch === "W") return `<span class="badge" style="border-color:rgba(34,197,94,.55)">W</span>`;
+    if (ch === "D") return `<span class="badge" style="border-color:rgba(234,179,8,.55)">D</span>`;
+    if (ch === "L") return `<span class="badge" style="border-color:rgba(239,68,68,.55)">L</span>`;
+    return `<span class="badge">?</span>`;
+  }).join("")}</div>`;
+}
+
+function openModal(playerName) {
+  const backdrop = document.getElementById("modalBackdrop");
+  document.getElementById("modalName").textContent = playerName;
+  document.getElementById("modalBody").innerHTML = "Loading…";
+  backdrop.style.display = "flex";
+  backdrop.setAttribute("aria-hidden", "false");
+
+  const cpct = fmtPct(checkoutPctFromStatEntry(playerName));
+  const form = renderFormPills(buildCurrentForm(playerName, 5));
+  const recFromRes = computeRecordFromResults(playerName);
+
+  let p = PLAYER_STATS_CACHE ? (PLAYER_STATS_CACHE.find(x => samePlayer(x["Player"] || "", playerName)) || null) : null;
+  const fb = buildFallbackFromStatEntry(playerName);
+
+  if (!p && !fb && recFromRes.matches === 0) {
+    document.getElementById("modalBody").innerHTML = `<div class="error">No data found for <strong>${esc(playerName)}</strong> yet.</div>`;
+    return;
+  }
+
+  const v = k => p ? (p[k] ?? "") : "";
+  const matches   = p ? (v("Matches")  || recFromRes.matches)  : recFromRes.matches;
+  const wins      = p ? (v("Wins")     || recFromRes.wins)     : recFromRes.wins;
+  const draws     = p ? (v("Draws")    || recFromRes.draws)    : recFromRes.draws;
+  const losses    = p ? (v("Losses")   || recFromRes.losses)   : recFromRes.losses;
+  const legsWon   = p ? (v("Legs Won") || (recFromRes.legsWon  ?? "—")) : (recFromRes.legsWon  ?? "—");
+  const legsLost  = p ? (v("Legs Lost")|| (recFromRes.legsLost ?? "—")) : (recFromRes.legsLost ?? "—");
+  const s60  = p ? v("60+")  : (fb ? fb.s60  : 0);
+  const s80  = p ? v("80+")  : (fb ? fb.s80  : 0);
+  const s100 = p ? v("100+") : (fb ? fb.s100 : 0);
+  const s140 = p ? v("140+") : (fb ? fb.s140 : 0);
+  const s180 = p ? v("180")  : (fb ? fb.s180 : 0);
+  const hf   = p ? (v("Highest Finish") || "—") : (fb && fb.highestFinish ? fb.highestFinish : "—");
+  const bl   = p ? (v("Best Leg")       || "—") : (fb && fb.bestLeg ? fb.bestLeg : "—");
+
+  document.getElementById("modalBody").innerHTML = `
+    <div class="profile-grid">
+      <div class="kpi">
+        <h4>Record</h4>
+        <div class="rows">
+          <div class="row"><span>Matches</span><span>${esc(matches)}</span></div>
+          <div class="row"><span>Wins / Draws / Losses</span><span>${esc(wins)} / ${esc(draws)} / ${esc(losses)}</span></div>
+          <div class="row"><span>Legs Won / Lost</span><span>${esc(legsWon)} / ${esc(legsLost)}</span></div>
+        </div>
+      </div>
+      <div class="kpi">
+        <h4>Scoring (Totals)</h4>
+        <div class="rows">
+          <div class="row"><span>60+</span><span>${esc(s60)}</span></div>
+          <div class="row"><span>80+</span><span>${esc(s80)}</span></div>
+          <div class="row"><span>100+</span><span>${esc(s100)}</span></div>
+          <div class="row"><span>140+</span><span>${esc(s140)}</span></div>
+          <div class="row"><span>180</span><span>${esc(s180)}</span></div>
+        </div>
+      </div>
+      <div class="kpi">
+        <h4>Records</h4>
+        <div class="rows">
+          <div class="row"><span>Highest Finish</span><span>${esc(hf)}</span></div>
+          <div class="row"><span>Best Leg (Lowest)</span><span>${esc(bl)}</span></div>
+          <div class="row"><span>Checkout %</span><span>${esc(cpct)}</span></div>
+        </div>
+      </div>
+      <div class="kpi">
+        <h4>Current Form (Last 5)</h4>
+        <div class="rows">
+          <div class="row"><span>Latest → Oldest</span><span>${form}</span></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function closeModal() {
+  const backdrop = document.getElementById("modalBackdrop");
+  backdrop.style.display = "none";
+  backdrop.setAttribute("aria-hidden", "true");
+}
+
+document.getElementById("modalClose").addEventListener("click", closeModal);
+document.getElementById("modalBackdrop").addEventListener("click", e => { if (e.target.id === "modalBackdrop") closeModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-player]");
+  if (t) openModal(t.getAttribute("data-player"));
+});
+
+/* ============================================================
+   RECENT RESULTS
+   ============================================================ */
+
+function renderRecentResults() {
+  const el = document.getElementById("recentResults");
+  const meta = document.getElementById("recentResultsMeta");
+  const limitSelect = document.getElementById("recentLimit");
+  if (!RESULTS_CACHE || !RESULTS_CACHE.length) {
+    el.innerHTML = `<div class="muted">No results yet.</div>`;
+    meta.textContent = "";
+    return;
+  }
+
+  const limit = Math.min(Math.max(parseInt(limitSelect.value || "5", 10), 1), 50);
+
+  const played = RESULTS_CACHE
+    .map((o, idx) => {
+      const dateStr = String(getAny(o, ["Date"]) || "").trim();
+      const d = parseDateAny(dateStr);
+      const home   = String(getAny(o, ["Home Player","Home"]) || "").trim();
+      const away   = String(getAny(o, ["Away Player","Away"]) || "").trim();
+      const hLegs  = String(getAny(o, ["Home Legs","Home Leg","Home Score"]) || "").trim();
+      const aLegs  = String(getAny(o, ["Away Legs","Away Leg","Away Score"]) || "").trim();
+      const winner = String(getAny(o, ["Winner"]) || "").trim();
+      const draw   = String(getAny(o, ["Draw?","Draw"]) || "").trim().toLowerCase();
+      const isDraw = ["y","yes","true","1"].includes(draw);
+      return { rowIndex: idx, d, dateStr, home, away, hLegs, aLegs, winner, isDraw, isPlayed: !!winner || isDraw };
+    })
+    .filter(x => x.isPlayed)
+    .sort((a,b) => b.rowIndex - a.rowIndex)
+    .slice(0, limit);
+
+  meta.textContent = played.length ? `Showing ${played.length} most recent result(s)` : "No played results found";
+
+  if (!played.length) { el.innerHTML = `<div class="muted">No played results to show.</div>`; return; }
+
+  let html = `<table><thead><tr>
+    <th>Date</th><th>Home</th><th></th><th>Away</th><th>Outcome</th>
+  </tr></thead><tbody>`;
+
+  played.forEach(r => {
+    const dateOut = r.d ? r.d.toLocaleDateString() : (r.dateStr ? esc(r.dateStr) : `<span class="muted">—</span>`);
+    const score = (r.hLegs || r.aLegs)
+      ? `<span class="score">${esc(r.hLegs || "0")} - ${esc(r.aLegs || "0")}</span>`
+      : `<span class="muted">—</span>`;
+    const outcome = r.isDraw
+      ? `<span class="badge">Draw</span>`
+      : (r.winner ? `<span class="badge">Winner: ${esc(r.winner)}</span>` : `<span class="muted">—</span>`);
+    html += `<tr>
+      <td class="small">${dateOut}</td>
+      <td>${esc(r.home)}</td>
+      <td>${score}</td>
+      <td>${esc(r.away)}</td>
+      <td>${outcome}</td>
+    </tr>`;
+  });
+
+  html += `</tbody></table>`;
+  el.innerHTML = html;
+}
+
+document.getElementById("recentLimit").addEventListener("change", renderRecentResults);
+
+/* ============================================================
+   LOAD ALL
+   ============================================================ */
+
+function resetUIForLoad() {
+  ["league","averages","records","highlights","formGuide","recentResults","fixtures"]
+    .forEach(id => { document.getElementById(id).innerHTML = "Loading…"; });
+  document.getElementById("highlightsRange").textContent = "";
+  document.getElementById("recentResultsMeta").textContent = "Loading…";
+  document.getElementById("weekSummary").textContent = "";
+  fixtureSearchInput.value = "";
+  _fixtureSearchTerm = "";
+  _allFixtureData = [];
+  document.getElementById("weekSelect").style.display = "";
+}
+
+function resetCaches() {
+  PLAYER_STATS_CACHE = null;
+  RESULTS_CACHE = null;
+  STAT_ENTRY_CACHE = null;
+}
+
+async function safeFetchCSV(gid) {
+  if (!gid || gid === "YOUR_GID_HERE") return null;
+  try {
+    return await fetch(csvUrl(gid), { cache: "no-store" }).then(r => r.text());
+  } catch(e) {
+    return null;
+  }
+}
+
+async function loadAll() {
+  resetCaches();
+  resetUIForLoad();
+
+  const [leagueCSV, avgCSV, fixCSV, psCSV, seCSV, resCSV] = await Promise.all([
+    safeFetchCSV(GID.LEAGUE),
+    safeFetchCSV(GID.AVERAGES),
+    safeFetchCSV(GID.FIXTURES),
+    safeFetchCSV(GID.PLAYER_STATS),
+    safeFetchCSV(GID.STAT_ENTRY),
+    safeFetchCSV(GID.RESULTS),
+  ]);
+
+  if (!leagueCSV) {
+    document.getElementById("league").innerHTML = `<div class="error">Missing GID for League Table — update config.</div>`;
+  } else {
+    renderTable(parseCSV(leagueCSV), "league", ["player"]);
+  }
+
+  if (!avgCSV) {
+    document.getElementById("averages").innerHTML = `<div class="error">Missing GID for Averages — update config.</div>`;
+  } else {
+    renderTable(parseCSV(avgCSV), "averages", []);
+  }
+
+  if (!fixCSV) {
+    document.getElementById("fixtures").innerHTML = `<div class="error">Missing GID for Fixtures — update config.</div>`;
+  } else {
+    renderFixtures(parseCSV(fixCSV));
+  }
+
+  if (psCSV) {
+    PLAYER_STATS_CACHE = rowsToObjects(parseCSV(psCSV));
+    renderRecords(PLAYER_STATS_CACHE);
+  } else {
+    document.getElementById("records").innerHTML = `<div class="error">Missing GID for Player Stats — update config.</div>`;
+  }
+
+  if (seCSV) {
+    const seRows = parseCSV(seCSV);
+    STAT_ENTRY_CACHE = rowsToObjects(seRows);
+    renderLeagueHighlights(seRows);
+  } else {
+    document.getElementById("highlights").innerHTML = `<div class="error">Missing GID for Stat Entry — update config.</div>`;
+  }
+
+  if (resCSV) {
+    RESULTS_CACHE = rowsToObjects(parseCSV(resCSV));
+    renderRecentResults();
+    renderFormGuide();
+  } else {
+    document.getElementById("recentResults").innerHTML = `<div class="error">Missing GID for Results — update config.</div>`;
+    document.getElementById("formGuide").innerHTML = `<div class="error">Missing GID for Results (needed for form).</div>`;
+  }
+}
+
+document.getElementById("refreshBtn").addEventListener("click", loadAll);
+loadAll();
+</script>
+
+</body>
+</html>
